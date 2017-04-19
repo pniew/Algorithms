@@ -74,7 +74,6 @@ namespace ConsoleApplication2
             else
             {
                 Element kolejny = jakiśTam.nastepny;
-
                 jakiśTam.nastepny = kolejny.nastepny;
 
                 // z uwagi, że to C# to sam usuwa 'kolejny' (zbieracz śmieci)
