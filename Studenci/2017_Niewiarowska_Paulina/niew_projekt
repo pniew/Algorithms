@@ -1,0 +1,108 @@
+#include <iostream>
+#include <conio.h>
+#include <cstdlib>
+#include <string>
+
+using namespace std;
+void free(void * ptr);
+
+const int a = 6;
+const int b = 6;
+
+int Tablica[a][b];
+
+//suma punktow:
+int P = 0;
+//biezaca lokalizacja:
+int La = 0;
+int Lb = 0;
+//zmienna na przechowywanie wartosci tymczasowych
+int T = 0;
+//zmienna do przechowywania sciezki
+string H;
+
+void WypelnijTabele()
+{
+	Tablica[0][0] = 9;
+	Tablica[1][0] = 1;
+	Tablica[2][0] = 1;
+	Tablica[3][0] = 1;
+	Tablica[4][0] = 1;
+	Tablica[5][0] = 1;
+	Tablica[0][1] = 1;
+	Tablica[1][1] = 1;
+	Tablica[2][1] = 1;
+	Tablica[3][1] = 9;
+	Tablica[4][1] = 1;
+	Tablica[5][1] = 1;
+	Tablica[0][2] = 1;
+	Tablica[1][2] = 9;
+	Tablica[2][2] = 1;
+	Tablica[3][2] = 1;
+	Tablica[4][2] = 1;
+	Tablica[5][2] = 6;
+	Tablica[0][3] = 1;
+	Tablica[1][3] = 1;
+	Tablica[2][3] = 8;
+	Tablica[3][3] = 6;
+	Tablica[4][3] = 9;
+	Tablica[5][3] = 9;
+	Tablica[0][4] = 6;
+	Tablica[1][4] = 1;
+	Tablica[2][4] = 1;
+	Tablica[3][4] = 1;
+	Tablica[4][4] = 1;
+	Tablica[5][4] = 1;
+	Tablica[0][5] = 1;
+	Tablica[1][5] = 1;
+	Tablica[2][5] = 1;
+	Tablica[3][5] = 1;
+	Tablica[4][5] = 1;
+	Tablica[5][5] = 1;
+}
+
+void SprawdzNajnizszyRzad(int Tablica[a][b])
+{
+	for (int j = 0; j < b; ++j)
+		if (T < Tablica[a - 1][j])
+		{
+			T = Tablica[a - 1][j],
+				La = a - 1,
+				Lb = j;
+		}
+
+}
+
+void main()
+{
+	for (int i = 0; i < a; ++i)
+		for (int j = 0; j < b; ++j)
+			Tablica[i][j] = 0;
+
+	WypelnijTabele();
+
+
+	// wyswietlam tablice:
+	cout << "tablica:" << endl;
+	{
+		for (int i = 0; i < a; ++i)
+		{
+			for (int j = 0; j < b; ++j)
+				cout << Tablica[i][j] << " ";
+			cout << endl;
+		}
+	}
+	// czekam na dowolny klawisz
+	_getch();
+
+	//sprawdzam, czy lapie pierwszy punkt:
+	SprawdzNajnizszyRzad(Tablica);
+	cout << T << endl;
+	cout << "koordynaty pktu 1 to: "  << La << ", " << Lb << endl;
+
+	_getch();
+
+	//free(* Tablica); ?????
+	
+}
+
