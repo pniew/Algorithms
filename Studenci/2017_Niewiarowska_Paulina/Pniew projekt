@@ -1,0 +1,321 @@
+#include <iostream>
+#include <conio.h>
+#include <cstdlib>
+#include <string>
+
+using namespace std;
+
+const int a = 6;
+const int b = 6;
+
+int Tablica[a][b];
+
+//suma punktow:
+int P = 0;
+//biezaca lokalizacja:
+int La = 0;
+int Lb = 0;
+//zmienna na przechowywanie wartosci tymczasowych
+int T = 0;
+//zmienna do przechowywania sciezki
+string H;
+
+void WypelnijWlasnymi()
+{
+
+	cout << "prosze podawac koleje wartosci, ktorymi ma zostac wypelniona tabela:" << endl;
+	{
+		for (int i = 0; i < a; ++i)
+		{
+			for (int j = 0; j < b; ++j)
+				cin >> Tablica[i][j];
+			cout << endl;
+		}
+	}
+}
+
+
+void WypelnijTabele()
+{
+	Tablica[0][0] = 9;
+	Tablica[1][0] = 1;
+	Tablica[2][0] = 1;
+	Tablica[3][0] = 1;
+	Tablica[4][0] = 1;
+	Tablica[5][0] = 1;
+	Tablica[0][1] = 1;
+	Tablica[1][1] = 1;
+	Tablica[2][1] = 1;
+	Tablica[3][1] = 9;
+	Tablica[4][1] = 1;
+	Tablica[5][1] = 1;
+	Tablica[0][2] = 1;
+	Tablica[1][2] = 9;
+	Tablica[2][2] = 1;
+	Tablica[3][2] = 1;
+	Tablica[4][2] = 1;
+	Tablica[5][2] = 6;
+	Tablica[0][3] = 1;
+	Tablica[1][3] = 1;
+	Tablica[2][3] = 8;
+	Tablica[3][3] = 6;
+	Tablica[4][3] = 9;
+	Tablica[5][3] = 9;
+	Tablica[0][4] = 6;
+	Tablica[1][4] = 1;
+	Tablica[2][4] = 1;
+	Tablica[3][4] = 1;
+	Tablica[4][4] = 1;
+	Tablica[5][4] = 1;
+	Tablica[0][5] = 1;
+	Tablica[1][5] = 1;
+	Tablica[2][5] = 1;
+	Tablica[3][5] = 1;
+	Tablica[4][5] = 1;
+	Tablica[5][5] = 1;
+}
+
+//funkcja szukajaca najwiekszej wartosci w najnizszym rzedzie. Wyjscie to: T, La, Lb
+void SprawdzNajnizszyRzad(int Tablica[a][b])
+{
+	for (int j = 0; j < b; ++j)
+	if (T < Tablica[a - 1][j])
+	{
+		T = Tablica[a - 1][j],
+			La = a - 1,
+			Lb = j;
+	}
+
+}
+
+//funkcja wspinajaca sie po kolejnych rzedach, az do drugiego od gory
+void WejsciePoWierszach(int La, int Lb)
+{
+	for (int i = a; i > 2; i--)
+
+	{
+		int Lb2 = 0;
+		T = 0;
+		La = La - 1;
+		if (Lb >= 2 && T < Tablica[La][Lb - 2])
+		{
+			T = Tablica[La][Lb - 2];
+			Lb2 = Lb - 2;
+		}
+		if (Lb >= 1 && T < Tablica[La][Lb - 1])
+		{
+			T = Tablica[La][Lb - 1];
+			Lb2 = Lb - 1;
+		}
+		if (T < Tablica[La][Lb])
+		{
+			T = Tablica[La][Lb];
+			Lb2 = Lb;
+		}
+		if (Lb <= b - 3 && T < Tablica[La][Lb + 2])
+		{
+			T = Tablica[La][Lb + 2];
+			Lb2 = Lb + 2;
+		}
+		if (Lb <= b - 2 && T < Tablica[La][Lb + 1])
+		{
+			T = Tablica[La][Lb + 1];
+			Lb2 = Lb + 1;
+		}
+
+		Lb = Lb2;
+
+		cout << "wartosc dla rzedu " << (La + 1) << " to: " << T << ", natomiast koordynaty to: " << (La + 1) << ", " << (Lb + 1) << endl;
+
+		Tablica[La][Lb] = 0;
+		P = P + T;
+		_getch();
+		cout << "wynik: " << P << endl;
+		_getch();
+	}
+}
+
+//funkcja szukajaca najwiekszej wartosci w najwyzszym rzedzie, wartosci wyjsciowe to wynik P, lokalizacja La i Lb i wyzerowanie pola
+void SprawdzNajwyzszyRzad(int Tablica[a][b])
+{
+	T = 0;
+	for (int j = 0; j < b; ++j)
+	if (T < Tablica[0][j])
+	{
+		T = Tablica[0][j],
+			La = 0,
+			Lb = j;
+	}
+	Tablica[La][Lb] = 0;
+
+}
+
+//funkcja schodzaca 
+void Zejscie(int La, int Lb)
+{
+	while (La < (a - 1))
+
+	{
+		int Lb85 = 0;
+		int La33 = 0;
+		T = 0;
+		int G = a - 1;
+
+		//dla zejscia o 2 w dol i o 1 w lewo (a-3, bo wtedy mozna 2):
+		if (La <= (a - 3) && Lb >= 1 && T < Tablica[La + 2][Lb - 1] && (G - (La + 2)) >= 0 && ((G - (La + 2)) % 2 == 0 || (G - (La + 2)) % 3 == 0 || (G - (La + 2)) % 5 == 0))
+		{
+			T = Tablica[La + 2][Lb - 1];
+			Lb85 = Lb - 1;
+			La33 = La + 2;
+		}
+
+		//dla zejecia o 2 w dol, bezposrednio:
+		if (La <= (a - 3) && T < Tablica[La + 2][Lb] && (G - (La + 2)) >= 0 && ((G - (La + 2)) % 2 == 0 || (G - (La + 2)) % 3 == 0 || (G - (La + 2)) % 5 == 0))
+		{
+			T = Tablica[La + 2][Lb];
+			Lb85 = Lb;
+			La33 = La + 2;
+		}
+
+		//dla zejecia o 2 w dol i o 1 w prawo:
+		if (La <= (a - 3) && Lb < (b - 1) && T < Tablica[La + 2][Lb + 1] && (G - (La + 2)) >= 0 && ((G - (La + 2)) % 2 == 0 || (G - (La + 2)) % 3 == 0 || (G - (La + 2)) % 5 == 0))
+		{
+			T = Tablica[La + 2][Lb + 1];
+			Lb85 = Lb + 1;
+			La33 = La + 2;
+		}
+
+		//dla zejecia o 3 w dol i o 1 w lewo:
+		if (La <= (a - 4) && Lb >= 1 && T < Tablica[La + 3][Lb - 1] && (G - (La + 3)) >= 0 && ((G - (La + 3)) % 2 == 0 || (G - (La + 3)) % 3 == 0 || (G - (La + 3)) % 5 == 0))
+		{
+			T = Tablica[La + 3][Lb - 1];
+			Lb85 = Lb - 1;
+			La33 = La + 3;
+		}
+
+		//dla zejscia o 3 w dol, bezposrednio:
+		if (La <= (a - 4) && T < Tablica[La + 3][Lb] && (G - (La + 3)) >= 0 && ((G - (La + 3)) % 2 == 0 || (G - (La + 3)) % 3 == 0 || (G - (La + 3)) % 5 == 0))
+		{
+			T = Tablica[La + 3][Lb];
+			Lb85 = Lb;
+			La33 = La + 3;
+		}
+
+		//dla zejecia o 3 w dol i o 1 w prawo:
+		if (La <= (a - 4) && Lb < (b - 1) && T < Tablica[La + 3][Lb + 1] && (G - (La + 3)) >= 0 && ((G - (La + 3)) % 2 == 0 || (G - (La + 3)) % 3 == 0 || (G - (La + 3)) % 5 == 0))
+		{
+			T = Tablica[La + 3][Lb + 1];
+			Lb85 = Lb + 1;
+			La33 = La + 3;
+		}
+
+		Lb = Lb85;
+		La = La33;
+
+		cout << "wartosc... kolejna, to: " << T << ", natomiast koordynaty to: " << (La + 1) << ", " << (Lb + 1) << endl;
+
+		Tablica[La][Lb] = 0;
+		P = P + T;
+		_getch();
+		cout << "wynik: " << P << endl;
+		_getch();
+	}
+}
+
+
+
+void main()
+{
+	for (int i = 0; i < a; ++i)
+	for (int j = 0; j < b; ++j)
+		Tablica[i][j] = 0;
+
+	WypelnijTabele();
+	//WypelnijWlasnymi();
+
+
+	// wyswietlam tablice:
+	cout << "tablica:" << endl;
+	{
+		for (int i = 0; i < a; ++i)
+		{
+			for (int j = 0; j < b; ++j)
+				cout << Tablica[i][j] << " ";
+			cout << endl;
+		}
+	}
+	// czekam na dowolny klawisz
+	_getch();
+
+	//sprawdzam, czy lapie pierwszy punkt:
+	SprawdzNajnizszyRzad(Tablica);
+
+	//uaktualniam wynik i zeruje pierwsze miejsce:
+	P = P + T;
+	Tablica[La][Lb] = 0;
+
+	cout << "wartosc pktu pierwszego to: " << T << ", natomiast koordynaty pktu 1 to: " << (La + 1) << ", " << (Lb + 1) << endl;
+
+	//wykonuje petle dla kolejnych wartosci
+	WejsciePoWierszach(La, Lb);
+
+	//wchodze na prawie szczyt
+	SprawdzNajwyzszyRzad(Tablica);
+	P = P + T;
+	cout << "pkty z najwyzszego rzedu to " << T << ", mieszcza sie w " << (La + 1) << ", " << (Lb + 1) << ", a to daje wynik rowny " << P << endl;
+
+
+	_getch();
+
+	//znow wyswietlam tablice:
+
+	cout << endl;
+	cout << "tablica po wejsciu:" << endl;
+	{
+		for (int i = 0; i < a; ++i)
+		{
+			for (int j = 0; j < b; ++j)
+				cout << Tablica[i][j] << " ";
+			cout << endl;
+		}
+	}
+
+	_getch();
+
+	//wchodze na szczyt i zaczynam schodzenie
+	SprawdzNajwyzszyRzad(Tablica);
+	P = P + T;
+
+	cout << endl;
+	cout << "nastepne pkty z najwyzszego rzedu to " << T << ", mieszcza sie w " << (La + 1) << ", " << (Lb + 1) << ", a to daje wynik rowny " << P << endl;
+
+
+	_getch();
+
+	//uwaga, schodze:
+	Zejscie(La, Lb);
+
+	//znow wyswietlam tablice:
+
+	cout << endl;
+	cout << "tablica po zejsciu:" << endl;
+	{
+		for (int i = 0; i < a; ++i)
+		{
+			for (int j = 0; j < b; ++j)
+				cout << Tablica[i][j] << " ";
+			cout << endl;
+		}
+	}
+
+	_getch();
+
+	cout << endl;
+	cout << "natomiast najwyzszy wynik mozliwy do zdobycia tym sposobem to: " << P << endl;
+
+	_getch();
+
+	//free(* Tablica);
+
+}
+
